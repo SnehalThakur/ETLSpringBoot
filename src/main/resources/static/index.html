@@ -27,7 +27,7 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
-#responseTableDiv{
+#responseTableDiv ,#fileTableDiv{
 display: none;
 }
 .loader {
@@ -138,8 +138,14 @@ display: none;
     <br/>
 <!--    style="width:80vw;height:10vh;background:white;border: 1px solid gray;
     border-radius: 10px;"-->
-    <div  >
-        <textarea style="width:90vw;height: 20vh" id="output"></textarea>
+<!--    <div  >-->
+<!--        <textarea style="width:90vw;height: 20vh" id="output"></textarea>-->
+<!--    </div>-->
+    <div style="width:80vw;height:40vh;background:white;border: 1px solid gray; margin-top:15px;
+    border-radius: 10px; overflow: auto;width: 90vw;padding: 10px;white-space: nowrap;" id="fileTableDiv">
+        <table id="showFile">
+
+        </table>
     </div>
 
     <div style="margin-top: 15px;">
@@ -157,9 +163,11 @@ display: none;
         </select>
     </div>
 
-    <div style="margin-top: 15px;text-align: center;">
+<div style="margin-top: 15px;text-align: center;">
         <button onclick="execute()" >Execute</button> &nbsp;&nbsp;
         <button onclick="reset()" >Reset</button>
+        <button onclick="noneFunction('display')" >Display none</button>
+        <button onclick="noneFunction('remove')" >Remove none</button>
 
     </div>
     <div style="text-align: center;width:90vw">

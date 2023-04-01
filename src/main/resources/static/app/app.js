@@ -13,7 +13,7 @@ function splitLines(sMessage) {
 
 function execute(){
 //    var filePath = document.getElementById("myFile").value;
-loader
+//loader
     document.getElementById("loader").style.display ="block";
 
     var filePath = document.getElementById("myFile").files[0].name;
@@ -75,20 +75,121 @@ loader
         xhttp.send(JSON.stringify(payload));
     }
 
+function noneFunction(type){
 
+        document.getElementById("loader").style.display ="block";
+                var filePath = document.getElementById("myFile").files[0].name;
+                console.log("filePath: -",filePath);
+                var e = document.getElementById("fileType");
+                var value = e.value;
+                var text = e.options[e.selectedIndex].text;
+
+                var responseFileType = document.getElementById("responseFileType");
+                var responseFileTypevalue = responseFileType.value;
+                var responseFileTypetext = responseFileType.options[responseFileType.selectedIndex].text;
+                let payload={
+                        "query" : type == 'display'? "Display none": "Remove none",
+                        "inputFileType": value,
+                        "inputFilePath": filePath,
+                        "outputFileType": responseFileTypevalue,
+                        "outputFilePath": ""
+                    }
+                    console.log("payload: -",payload);
+                    var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function() {
+                             if (this.readyState == 4 && this.status == 200) {
+                                 console.log(this.responseText);
+                                 console.log("this.responseText: - ",typeof this.responseText);
+                                document.getElementById("loader").style.display ="none";
+
+                                 document.getElementById("responseTableDiv").style.display ="block";
+                                 let responseObj = JSON.parse(this.responseText);
+                                 let templateData='<tr>';
+                                 let keys = Object.keys(responseObj[0]);
+                                 keys.forEach(function(item){
+                                 templateData +='<th>'+item+'</th>'
+                                 })
+                                 templateData +='</tr>'
+                                 console.log("keys: -", keys);
+
+
+                                responseObj.forEach(function(item){
+                                templateData +='<tr>'
+                                    const propertyValues = Object.values(item);
+                                    console.log("propertyValues: -", propertyValues);
+                                    propertyValues.forEach(function(itemData){
+                                        templateData +='<td>'+itemData+'</td>'
+                                    })
+                                   templateData +='</tr>'
+                                })
+                                 document.getElementById("showResponse").innerHTML = templateData;
+
+                             }
+                        };
+                        xhttp.open("POST", "http://localhost:8099/execute", true);
+                        xhttp.setRequestHeader("Content-type", "application/json");
+                        xhttp.send(JSON.stringify(payload));
+
+}
     window.addEventListener('load',function(){
     document.getElementById("myFile").addEventListener("change", function () {
     console.log("in side input");
     console.log("this.files: -",this.files);
       if (this.files && this.files[0]) {
+      document.getElementById("loader").style.display ="block";
         var myFile = this.files[0];
         var reader = new FileReader();
+         var filePath = document.getElementById("myFile").files[0].name;
+        console.log("filePath: -",filePath);
+        var e = document.getElementById("fileType");
+        var value = e.value;
+        let payload={
+                "query" : "",
+                "inputFileType": value,
+                "inputFilePath": filePath,
+                "outputFileType": value,
+                "outputFilePath": ""
+            }
+            console.log("payload: -",payload);
+            var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                     if (this.readyState == 4 && this.status == 200) {
+                         console.log(this.responseText);
+                         console.log("this.responseText: - ",typeof this.responseText);
+                        document.getElementById("loader").style.display ="none";
 
-        reader.addEventListener('load', function (e) {
-          document.getElementById("output").textContent = e.target.result;
-        });
+                         document.getElementById("fileTableDiv").style.display ="block";
+                         let responseObj = JSON.parse(this.responseText);
+                         let templateData='<tr>';
+                         let keys = Object.keys(responseObj[0]);
+                         keys.forEach(function(item){
+                         templateData +='<th>'+item+'</th>'
+                         })
+                         templateData +='</tr>'
+                         console.log("keys: -", keys);
 
-        reader.readAsBinaryString(myFile);
+
+                        responseObj.forEach(function(item){
+                        templateData +='<tr>'
+                            const propertyValues = Object.values(item);
+                            console.log("propertyValues: -", propertyValues);
+                            propertyValues.forEach(function(itemData){
+                                templateData +='<td>'+itemData+'</td>'
+                            })
+                           templateData +='</tr>'
+                        })
+                         document.getElementById("showFile").innerHTML = templateData;
+
+                     }
+                };
+                xhttp.open("POST", "http://localhost:8099/execute", true);
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.send(JSON.stringify(payload));
+//        reader.addEventListener('load', function (e) {
+//          document.getElementById("output").textContent = e.target.result;
+//        });
+//
+//        reader.readAsBinaryString(myFile);
       }
     });
     });

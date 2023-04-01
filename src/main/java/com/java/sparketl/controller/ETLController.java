@@ -145,6 +145,8 @@ public class ETLController {
             // Saving the file to MySQL DB
             List<IndiaPO> poList = indiaPOService.savePOList(indiaPOList);
             // Execute Custom Query
+            if(query.equals(""))
+                query = "select * from india_po";
             json = indiaPOService.executeCustomQuery(query);
 /*            // Saving result in output file
             if(formRequestBody.getOutputFileType().equals("csv")){
@@ -159,12 +161,16 @@ public class ETLController {
         }else if(formRequestBody.getInputFileType().equals("text")){
             List<Employee> employeeList = inputFileReader.readTextFile(inputFilePath);
             List<Employee> empList = employeeService.saveEmployeeList(employeeList);
+            if(query.equals(""))
+                query = "select * from employee";
             json = employeeService.executeCustomQuery(query);
             System.out.println("Text JSON Response" + json);
             return new ResponseEntity<>(json, headers, HttpStatus.OK);
         }else  if(formRequestBody.getInputFileType().equals("json")){
             List<BestBuy> bestBuyList = inputFileReader.readJsonFile(inputFilePath);
             List<BestBuy> bbList = bestBuyService.saveBBList(bestBuyList);
+            if(query.equals(""))
+                query = "select * from bestbuy";
             json = bestBuyService.executeCustomQuery(query);
             System.out.println("JSON Response" + json);
             return new ResponseEntity<>(json, headers, HttpStatus.OK);
