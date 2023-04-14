@@ -43,7 +43,10 @@ display: none;
   animation: spin 2s linear infinite;
   display: none
 }
-
+.sucess-msg{
+display:none;
+color: green;
+}
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }
   100% { -webkit-transform: rotate(360deg); }
@@ -125,6 +128,7 @@ display: none;
             <option value="text">Text file</option>
             <option value="csv">CSV file</option>
             <option value="json">JSON file</option>
+            <option value="tsv">TSV file</option>
 <!--            <option value="mysql">MySQL DB</option>-->
         </select>
     </div>
@@ -154,26 +158,29 @@ display: none;
     </div>
     <div style="margin-top: 15px;">
         <label>Response Type</label>
-        <!--    <input type="text" v-model="selektovaniStudent.id" v-bind:disabled="mod !== 2"/>-->
         <select name="responseFileType" id="responseFileType">
             <option value="text">Text file</option>
             <option value="csv">CSV file</option>
             <option value="json">JSON file</option>
-            <!--            <option value="mysql">MySQL DB</option>-->
+            <option value="tsv">TSV file</option>
         </select>
     </div>
 
 <div style="margin-top: 15px;text-align: center;">
-        <button onclick="execute()" >Execute</button> &nbsp;&nbsp;
-        <button onclick="reset()" >Reset</button>
-        <button onclick="noneFunction('display')" >Display none</button>
-        <button onclick="noneFunction('remove')" >Remove none</button>
+    <button onclick="noneFunction('display')" >Display none</button>
+    <button onclick="noneFunction('remove')" >Remove none</button>
+    <button onclick="execute()" >Execute</button> &nbsp;&nbsp;
+    <button onclick="reset()" >Reset</button>
+    <button onclick="exportFileWithType()" >Export</button>
+
 
     </div>
     <div style="text-align: center;width:90vw">
         <div class="loader" id="loader"></div>
     </div>
-
+    <div style="text-align: center;width:90vw">
+        <div class="sucess-msg" id="sucess-msg">File Successfully Exported</div>
+    </div>
     <div style="width:80vw;height:40vh;background:white;border: 1px solid gray; margin-top:15px;
     border-radius: 10px; overflow: auto;width: 90vw;padding: 10px;white-space: nowrap;" id="responseTableDiv">
         <table id="showResponse">

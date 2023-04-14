@@ -75,6 +75,74 @@ function execute(){
         xhttp.send(JSON.stringify(payload));
     }
 
+function exportFileWithType(){
+//    var filePath = document.getElementById("myFile").value;
+//loader
+//    document.getElementById("loader").style.display ="block";
+//
+//    var filePath = document.getElementById("myFile").files[0].name;
+//    console.log("filePath: -",filePath);
+console.log("In exp");
+    var e = document.getElementById("fileType");
+    var value = e.value;
+//    var text = e.options[e.selectedIndex].text;
+//
+    var responseFileType = document.getElementById("responseFileType");
+    var responseFileTypevalue = responseFileType.value;
+//    var responseFileTypetext = responseFileType.options[responseFileType.selectedIndex].text;
+//
+//    console.log(value, text);
+//    console.log("responseFileTypevalue: ",responseFileTypevalue, responseFileTypetext);
+
+    var query = document.getElementById("query").value;
+    console.log("query: -",query);
+    let payload={
+        "query" : query,
+        "inputFileType": value,
+        "inputFilePath": "",
+        "outputFileType": responseFileTypevalue,
+        "outputFilePath": ""
+    }
+    console.log("payload: -",payload);
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+             console.log(this.responseText);
+             console.log("this.responseText: - ",typeof this.responseText);
+            document.getElementById("sucess-msg").style.display ="block";
+            setTimeout(function(){
+            document.getElementById("sucess-msg").style.display ="none";
+            },5000)
+
+//             document.getElementById("responseTableDiv").style.display ="block";
+//             let responseObj = JSON.parse(this.responseText);
+//             let templateData='<tr>';
+//             let keys = Object.keys(responseObj[0]);
+//             keys.forEach(function(item){
+//             templateData +='<th>'+item+'</th>'
+//             })
+//             templateData +='</tr>'
+//             console.log("keys: -", keys);
+
+
+//            responseObj.forEach(function(item){
+//            templateData +='<tr>'
+//                const propertyValues = Object.values(item);
+//                console.log("propertyValues: -", propertyValues);
+//                propertyValues.forEach(function(itemData){
+//                    templateData +='<td>'+itemData+'</td>'
+//                })
+//               templateData +='</tr>'
+//            })
+//             document.getElementById("showResponse").innerHTML = templateData;
+
+         }
+    };
+    xhttp.open("POST", "http://localhost:8099/exportfile", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(payload));
+}
+
 function noneFunction(type){
 
         document.getElementById("loader").style.display ="block";

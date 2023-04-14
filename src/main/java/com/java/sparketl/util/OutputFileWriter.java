@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
+import  com.aspose.cells.Workbook;
 
 @Component
 public class OutputFileWriter {
@@ -73,8 +74,46 @@ public class OutputFileWriter {
         for(Employee mapping : resultArray) {
             fileWriter.write(mapping + "\n");
         }
-
         fileWriter.close();
-
     }
+
+    public void jsonFileWriter(String filepath, String jsonFile) throws IOException {
+        FileWriter file = new FileWriter(filepath);
+        file.write(jsonFile);
+        file.close();
+    }
+
+    public void saveJsonToTxt(String fileName, String jsonFile) throws Exception {
+        String filepath = "C:\\Users\\snehal\\IdeaProjects\\spark-etl\\src\\main\\resources\\Output\\"+fileName+".json";
+        jsonFileWriter(filepath, jsonFile);
+        Workbook workbook = new Workbook(filepath);
+        String outputFilePath = "C:\\Users\\snehal\\IdeaProjects\\spark-etl\\src\\main\\resources\\Output\\"+fileName+".txt";
+        workbook.save(outputFilePath);
+        System.out.println("File successfully saved"+ outputFilePath);
+    }
+
+    public void saveJsonToCsv(String fileName, String jsonFile) throws Exception {
+        String filepath = "C:\\Users\\snehal\\IdeaProjects\\spark-etl\\src\\main\\resources\\Output\\"+fileName+".json";
+        jsonFileWriter(filepath, jsonFile);
+        Workbook workbook = new Workbook(filepath);
+        String outputFilePath = "C:\\Users\\snehal\\IdeaProjects\\spark-etl\\src\\main\\resources\\Output\\"+fileName+".csv";
+        workbook.save(outputFilePath);
+        System.out.println("File successfully saved"+ outputFilePath);
+    }
+
+    public void saveJsonToTsv(String fileName, String jsonFile) throws Exception {
+        String filepath = "C:\\Users\\snehal\\IdeaProjects\\spark-etl\\src\\main\\resources\\Output\\"+fileName+".json";
+        jsonFileWriter(filepath, jsonFile);
+        Workbook workbook = new Workbook(filepath);
+        String outputFilePath = "C:\\Users\\snehal\\IdeaProjects\\spark-etl\\src\\main\\resources\\Output\\"+fileName+".tsv";
+        workbook.save(outputFilePath);
+        System.out.println("File successfully saved"+ outputFilePath);
+    }
+
+    public void saveJsonFile(String fileName, String jsonFile) throws Exception {
+        String filepath = "C:\\Users\\snehal\\IdeaProjects\\spark-etl\\src\\main\\resources\\Output\\"+fileName+".json";
+        jsonFileWriter(filepath, jsonFile);
+        System.out.println("File successfully saved"+ filepath);
+    }
+
 }

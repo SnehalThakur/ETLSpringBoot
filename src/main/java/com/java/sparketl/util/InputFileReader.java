@@ -3,6 +3,7 @@ package com.java.sparketl.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.sparketl.model.BestBuy;
 import com.java.sparketl.model.Employee;
+import com.java.sparketl.model.IndiaCities;
 import com.java.sparketl.model.IndiaPO;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -132,7 +133,6 @@ public class InputFileReader {
         return bestBuyObj;
     }
 
-//    public static List<Employee> readTextFile(String filePath) throws IOException {
     public static List<Employee> readTextFile(String filePath) throws IOException {
 
         // File path is passed as parameter
@@ -171,6 +171,48 @@ public class InputFileReader {
             rowCount+=1;
         }
         return employees;
+    }
+
+    public static List<IndiaCities> readTSVFile(String filePath) throws IOException {
+
+        // File path is passed as parameter
+        File file = new File(filePath);
+
+        // Creating an object of BufferedReader class
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        // Declaring a string variable
+        String st;
+        int rowCount = 0;
+        List<IndiaCities> cities = new ArrayList<IndiaCities>();
+        while ((st = br.readLine()) != null) {
+            System.out.println(st);
+            String city = st.split("\\t")[0];
+            String lat = st.split("\\t")[1];
+            String lng = st.split("\\t")[2];
+            String country = st.split("\\t")[3];
+            String iso2 = st.split("\\t")[4];
+            String admin_name = st.split("\\t")[5];
+            String capital = st.split("\\t")[6];
+            String population = st.split("\\t")[7];
+            String population_proper = st.split("\\t")[8];
+            if(rowCount!=0) {
+                IndiaCities indiaCities = new IndiaCities(
+                        city,
+                        lat,
+                        lng,
+                        country,
+                        iso2,
+                        admin_name,
+                        capital,
+                        population,
+                        population_proper);
+
+                cities.add(indiaCities);
+            }
+            rowCount+=1;
+        }
+        return cities;
     }
 
 

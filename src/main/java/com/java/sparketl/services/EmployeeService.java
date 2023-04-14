@@ -6,9 +6,12 @@ package com.java.sparketl.services;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.java.sparketl.model.BestBuy;
 import com.java.sparketl.model.Employee;
 import com.java.sparketl.repositoriy.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +26,9 @@ public class EmployeeService {
 
     @Autowired
     EmployeeRepo employeeRepo;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -39,13 +45,42 @@ public class EmployeeService {
 
 
     public String executeCustomQuery(String query) throws JsonProcessingException {
-        List<Employee> results = entityManager.createNativeQuery(query, Employee.class).getResultList();
+
+        if(query.contains("DELETE")) {
+            jdbcTemplate.update(query);
+            List<Employee> results = jdbcTemplate.query("select * from employee", BeanPropertyRowMapper.newInstance(Employee.class));
+            // Create ObjectMapper object.
+            ObjectMapper mapper = new ObjectMapper();
+            // Serialize Object to JSON.
+            String json = mapper.writeValueAsString(results);
+            return json;
+        }
+        else if(query.toLowerCase().contains("select")){
+            List<Employee> results = jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(Employee.class));
+            // Create ObjectMapper object.
+            ObjectMapper mapper = new ObjectMapper();
+            // Serialize Object to JSON.
+            String json = mapper.writeValueAsString(results);
+            return json;
+        }
+        else {
+            jdbcTemplate.update(query);
+            List<Employee> results = jdbcTemplate.query("select * from employee", BeanPropertyRowMapper.newInstance(Employee.class));
+            // Create ObjectMapper object.
+            ObjectMapper mapper = new ObjectMapper();
+            // Serialize Object to JSON.
+            String json = mapper.writeValueAsString(results);
+            return json;
+        }
+
+
+        /*   List<Employee> results = entityManager.createNativeQuery(query, Employee.class).getResultList();
         // Create ObjectMapper object.
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         // Serialize Object to JSON.
         String json = mapper.writeValueAsString(results);
-        return json;
+        return json;*/
     }
 
 

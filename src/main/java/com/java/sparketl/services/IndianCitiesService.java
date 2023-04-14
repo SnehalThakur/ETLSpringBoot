@@ -1,61 +1,48 @@
 package com.java.sparketl.services;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.java.sparketl.model.BestBuy;
-import com.java.sparketl.model.IndiaPO;
-import com.java.sparketl.repositoriy.BestBuyRepo;
+import com.java.sparketl.model.Employee;
+import com.java.sparketl.model.IndiaCities;
+import com.java.sparketl.repositoriy.EmployeeRepo;
+import com.java.sparketl.repositoriy.IndiaCitiesRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import javax.persistence.Query;
-import javax.persistence.EntityManager;
-
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Component
-public class BestBuyService {
-    @Autowired
-    BestBuyRepo bestBuyRepo;
+public class IndianCitiesService {
 
     @Autowired
-    private EntityManager entityManager;
+    IndiaCitiesRepo indiaCitiesRepo;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public List<BestBuy> executeBestBuyQuery(){
-        List<BestBuy> records = bestBuyRepo.findAll();
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public List<IndiaCities> executeIndiaCitiesQuery(){
+        List<IndiaCities> records = indiaCitiesRepo.findAll();
         return records;
     }
 
-    public List<BestBuy> saveBBList(List<BestBuy> bbList){
-        List<BestBuy> records = bestBuyRepo.saveAll(bbList);
+    public List<IndiaCities> saveIndiaCitiesList(List<IndiaCities> citiesList){
+        List<IndiaCities> records = indiaCitiesRepo.saveAll(citiesList);
         return records;
     }
 
-
-    public BestBuy getUserByRoll(EntityManager entityManager, String customQuery) {
-
-        String queryStr = customQuery;
-        try {
-            Query query = entityManager.createNativeQuery(queryStr);
-            List<Object[]> records = query.getResultList();
-            return new BestBuy((Object[]) query.getSingleResult());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
 
     public String executeCustomQuery(String query) throws JsonProcessingException {
 
         if(query.contains("DELETE")) {
             jdbcTemplate.update(query);
-            List<BestBuy> results = jdbcTemplate.query("select * from bestbuy", BeanPropertyRowMapper.newInstance(BestBuy.class));
+            List<IndiaCities> results = jdbcTemplate.query("select * from india_cities", BeanPropertyRowMapper.newInstance(IndiaCities.class));
             // Create ObjectMapper object.
             ObjectMapper mapper = new ObjectMapper();
             // Serialize Object to JSON.
@@ -63,7 +50,7 @@ public class BestBuyService {
             return json;
         }
         else if(query.toLowerCase().contains("select")){
-            List<BestBuy> results = jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(BestBuy.class));
+            List<IndiaCities> results = jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(IndiaCities.class));
             // Create ObjectMapper object.
             ObjectMapper mapper = new ObjectMapper();
             // Serialize Object to JSON.
@@ -72,7 +59,7 @@ public class BestBuyService {
         }
         else {
             jdbcTemplate.update(query);
-            List<BestBuy> results = jdbcTemplate.query("select * from bestbuy", BeanPropertyRowMapper.newInstance(BestBuy.class));
+            List<IndiaCities> results = jdbcTemplate.query("select * from india_cities", BeanPropertyRowMapper.newInstance(IndiaCities.class));
             // Create ObjectMapper object.
             ObjectMapper mapper = new ObjectMapper();
             // Serialize Object to JSON.
@@ -81,7 +68,7 @@ public class BestBuyService {
         }
 
 
-/*        List<BestBuy> results = entityManager.createNativeQuery(query, BestBuy.class).getResultList();
+        /*   List<Employee> results = entityManager.createNativeQuery(query, Employee.class).getResultList();
         // Create ObjectMapper object.
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
@@ -89,4 +76,7 @@ public class BestBuyService {
         String json = mapper.writeValueAsString(results);
         return json;*/
     }
+
+
 }
+
